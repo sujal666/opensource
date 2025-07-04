@@ -178,7 +178,7 @@ export async function GET(request: Request) {
 
   try {
     const data = await graphqlWithAuth(query, { queryString })
-
+//@ts-ignore
     const repos = data.search.nodes.map((item: any) => ({
       id: item.id,
       title: item.title,

@@ -99,6 +99,7 @@ export default function SavedPage() {
             difficulty: data.difficulty,
             updatedAt: data.updatedAt,
             createdAt: data.createdAt,
+            //@ts-ignore
             labels: data.labels || [],
             state: data.state,
             comments: data.comments ?? 0,

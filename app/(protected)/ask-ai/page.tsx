@@ -207,6 +207,7 @@ export default function AskAIPage() {
                             a: ({ node, ...props }) => (
                               <a {...props} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer" />
                             ),
+                            //@ts-ignore
                             code: ({ node, inline, className, children, ...props }) =>
                               !inline ? (
                                 <pre className="bg-gray-900 p-3 rounded overflow-x-auto text-sm">

@@ -45,7 +45,7 @@ export function WobbleCardDemo() {
           </p>
         </div>
         <img
-          src="/AskAi.png"
+          src="/AskAI.png"
           width={600}
           height={500}
           alt="linear demo image"

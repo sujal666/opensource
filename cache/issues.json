@@ -377,6 +377,23 @@
     ]
   },
   {
+    "id": "I_kwDOFM1HX86AZvTZ",
+    "title": "\"Virtualization service (libvirt) is not active\" tells me about wrong service",
+    "url": "https://github.com/cockpit-project/cockpit-machines/issues/1462",
+    "repoName": "cockpit-project/cockpit-machines",
+    "language": "JavaScript",
+    "difficulty": "good-first-issue",
+    "createdAt": "2024-02-26T13:48:56Z",
+    "updatedAt": "2024-03-04T13:26:32Z",
+    "comments": 2,
+    "repoUrl": "https://github.com/cockpit-project/cockpit-machines",
+    "state": "OPEN",
+    "body": "On Fedora 40 (and perhaps elsewhere) the Virtualization Service that the \"Virtual machines\" tab indicates that:\r\n\r\n![image](https://github.com/cockpit-project/cockpit-machines/assets/795070/c7033952-4623-402c-927c-2d89ab910a0a)\r\n\r\nHowever, the service is called `virtqemud`\r\n\r\n```\r\nFailed to get libvirt version from the dbus API: \r\nObject { problem: null, name: \"org.libvirt.Error\", message: \"Failed to connect socket to '/var/run/libvirt/virtqemud-sock': No such file or directory\", toString: toString() }\r\n```\r\n\r\nand\r\n\r\n```\r\n$ sudo systemctl status libvirtd\r\nUnit libvirtd.service could not be found.\r\n$ sudo systemctl status virtqemud\r\n● virtqemud.service - libvirt QEMU daemon\r\n...\r\n```\r\n\r\nVersion:\r\n\r\n```\r\ncockpit-machines-308-1.fc40.noarch\r\n```\r\n\r\n",
+    "labels": [
+      "good-first-issue"
+    ]
+  },
+  {
     "id": "I_kwDOATHRqM556pey",
     "title": "List items are not scrollable when viewing Food Editor on mobile.",
     "url": "https://github.com/nightscout/cgm-remote-monitor/issues/8192",
@@ -1202,6 +1219,24 @@
     ]
   },
   {
+    "id": "I_kwDOBD_Zic5G7-rk",
+    "title": "Styling: border-shortcut only working with certain order of arguments",
+    "url": "https://github.com/diegomura/react-pdf/issues/1768",
+    "repoName": "diegomura/react-pdf",
+    "language": "JavaScript",
+    "difficulty": "good-first-issue",
+    "createdAt": "2022-04-01T18:15:04Z",
+    "updatedAt": "2024-08-17T09:57:52Z",
+    "comments": 2,
+    "repoUrl": "https://github.com/diegomura/react-pdf",
+    "state": "OPEN",
+    "body": "**Describe the bug**\r\nThe border-shortcut (and borderTop etc. respectively) is only working when the arguments are in the following order: width, style, color. This contradicts the general CSS spec: https://developer.mozilla.org/en-US/docs/Web/CSS/border\r\n\r\nCertain orders do not apply the styles, other orders lead to an error. See https://codesandbox.io/s/admiring-sun-epi6q1. wrongOrderBorder2 in the Sandbox leads to an error for example.\r\n\r\n**Desktop (please complete the following information):**\r\n - Browser: Chrome\r\n - React-pdf version: 2.1.1\r\n",
+    "labels": [
+      "bug",
+      "good-first-issue"
+    ]
+  },
+  {
     "id": "I_kwDOATHRqM5Fy92N",
     "title": "Clock views don't show when token auth is used",
     "url": "https://github.com/nightscout/cgm-remote-monitor/issues/7377",
@@ -1574,6 +1609,24 @@
     "state": "OPEN",
     "body": "This action currently requires `node_modules` to be included in the repo because (we think) our `package.json` does not include a `preBuild` or `build` stage like <https://github.com/pulumi/actions/blob/master/package.json>.\r\n\r\nMake this repo work like <https://github.com/pulumi/actions/> so we don't need to include `node_modules`.",
     "labels": [
+      "good-first-issue"
+    ]
+  },
+  {
+    "id": "MDU6SXNzdWU5OTIwMzI1NTM=",
+    "title": "equivalent of CSS Property text-align-last: justify; in React ",
+    "url": "https://github.com/diegomura/react-pdf/issues/1495",
+    "repoName": "diegomura/react-pdf",
+    "language": "JavaScript",
+    "difficulty": "good-first-issue",
+    "createdAt": "2021-09-09T10:00:29Z",
+    "updatedAt": "2024-01-19T17:50:23Z",
+    "comments": 3,
+    "repoUrl": "https://github.com/diegomura/react-pdf",
+    "state": "OPEN",
+    "body": "Hi Guys ,\r\n  We are facing alligning last line of the page when generating pdf. Usually in CSS there is a property to justify last line however the same is not there in PDF. Can you please suggest how to achieve the similar output in this code ????",
+    "labels": [
+      "new feature",
       "good-first-issue"
     ]
   },

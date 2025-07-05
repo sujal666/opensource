@@ -12,6 +12,7 @@ import {
   useUser,
 } from '@clerk/nextjs'
 import { GoogleTagManager } from '@next/third-parties/google'
+import { Analytics } from '@vercel/analytics/next';
 
 
 const geistSans = Geist({
@@ -44,6 +45,7 @@ export default function RootLayout({
       >
         <CursorGlow />
         {children}
+        <Analytics />
       </body>
     </html>
     </ClerkProvider>

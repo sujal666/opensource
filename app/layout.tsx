@@ -11,6 +11,7 @@ import {
   UserButton,
   useUser,
 } from '@clerk/nextjs'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
     <html lang="en" className="dark">
+         <GoogleTagManager gtmId="G-4Y39G3D75H" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
       >

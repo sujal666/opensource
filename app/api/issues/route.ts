@@ -129,6 +129,14 @@
 
 
 
+
+
+
+
+
+
+
+
 // import { graphql } from '@octokit/graphql'
 // import { NextResponse } from 'next/server'
 // import fs from 'fs/promises'
@@ -144,8 +152,8 @@
 
 // export async function GET(request: Request) {
 //   const { searchParams } = new URL(request.url)
-//   const language = (searchParams.get('language') || '').toLowerCase()
-//   const label = (searchParams.get('label') || 'good-first-issue').toLowerCase()
+//   const language = searchParams.get('language') || ''
+//   const label = searchParams.get('label') || 'good-first-issue'
 
 //   const queryString = `is:issue is:open label:"${label}" ${language ? `language:${language}` : ''}`
 
@@ -220,45 +228,37 @@
 // }
 
 
-import { graphql } from '@octokit/graphql';
-import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
 
-const CACHE_FILE = path.join(process.cwd(), 'cache', 'issues.json');
+
+
+
+
+
+
+
+
+
+import { graphql } from '@octokit/graphql'
+import { NextResponse } from 'next/server'
+import fs from 'fs/promises'
+import path from 'path'
+
+const CACHE_FILE = path.join(process.cwd(), 'cache', 'issues.json')
 
 const graphqlWithAuth = graphql.defaults({
   headers: {
     authorization: `token ${process.env.GITHUB_TOKEN}`,
   },
-});
-
-// Optional: Whitelist of supported values
-const ALLOWED_LANGUAGES = [
-  'javascript', 'typescript', 'python', 'java', 'go', 'rust',
-  'c++', 'c#', 'php', 'ruby', 'kotlin', 'swift', 'dart',
-  'scala', 'shell', 'perl', 'haskell', 'elixir'
-];
-const ALLOWED_LABELS = [
-  'good-first-issue', 'help-wanted', 'bug', 'documentation',
-  'question', 'enhancement', 'design', 'discussion', 'feature-request',
-  'beginner-friendly'
-];
+})
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const rawLanguage = searchParams.get('language') || '';
-  const rawLabel = searchParams.get('label') || 'good-first-issue';
+  const { searchParams } = new URL(request.url)
+  const language = searchParams.get('language') || 'JavaScript'
+  const label = searchParams.get('label') || 'good-first-issue'
 
-  const language = rawLanguage.toLowerCase();
-  const label = rawLabel.toLowerCase().replace(/\s+/g, '-');
+  // const queryString = `is:issue is:open label:"${label}"`
+  const queryString = `is:issue is:open label:"${label}" language:${language || 'JavaScript'}`
 
-  // Optionally restrict invalid filters
-  if (!ALLOWED_LABELS.includes(label) || (language && !ALLOWED_LANGUAGES.includes(language))) {
-    return NextResponse.json([], { status: 200 });
-  }
-
-  const queryString = `is:issue is:open label:"${label}" ${language ? `language:${language}` : ''}`;
 
   const query = `
     query SearchIssues($queryString: String!) {
@@ -270,6 +270,9 @@ export async function GET(request: Request) {
             url
             repository {
               nameWithOwner
+              primaryLanguage {
+                name
+              }
             }
             createdAt
             updatedAt
@@ -287,51 +290,55 @@ export async function GET(request: Request) {
         }
       }
     }
-  `;
+  `
 
   try {
-    const data = await graphqlWithAuth(query, { queryString });
+    const data = await graphqlWithAuth(query, { queryString })
+//@ts-ignore
+    const allIssues = data.search.nodes.map((item: any) => {
+      const repoLanguage = item.repository.primaryLanguage?.name || 'Unknown'
 
+      return {
+        id: item.id,
+        title: item.title,
+        url: item.url,
+        repoName: item.repository.nameWithOwner,
+        language: repoLanguage,
+        difficulty: label,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+        comments: item.comments.totalCount,
+        repoUrl: `https://github.com/${item.repository.nameWithOwner}`,
+        state: item.state,
+        body: item.body || '',
+        labels: item.labels.nodes.map((l: any) => l.name),
+      }
+    })
+
+    // Filter by language in-code (case-insensitive)
+    const filteredIssues = language
     //@ts-ignore
-    const repos = data.search.nodes.map((item: any) => ({
-      id: item.id,
-      title: item.title,
-      url: item.url,
-      repoName: item.repository.nameWithOwner,
-      language,
-      difficulty: label,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-      comments: item.comments.totalCount,
-      repoUrl: `https://github.com/${item.repository.nameWithOwner}`,
-      state: item.state,
-      body: item.body || '',
-      labels: item.labels.nodes.map((l: any) => l.name),
-    }));
+      ? allIssues.filter(issue => issue.language.toLowerCase() === language.toLowerCase())
+      : allIssues
 
-    // Save to local cache
-    await fs.mkdir(path.dirname(CACHE_FILE), { recursive: true });
-    await fs.writeFile(CACHE_FILE, JSON.stringify(repos, null, 2));
+    // Cache
+    await fs.mkdir(path.dirname(CACHE_FILE), { recursive: true })
+    await fs.writeFile(CACHE_FILE, JSON.stringify(filteredIssues, null, 2))
 
-    return NextResponse.json(repos);
+    return NextResponse.json(filteredIssues)
   } catch (error) {
-    console.error('GraphQL error:', error);
+    console.error('GraphQL error:', error)
 
     try {
-      const cached = await fs.readFile(CACHE_FILE, 'utf-8');
-      const fallback = JSON.parse(cached).filter(
-        (item: any) =>
-          item.language?.toLowerCase() === language &&
-          item.difficulty?.toLowerCase() === label
-      );
-
-      console.warn('Returning cached fallback data.');
-      return NextResponse.json(fallback);
+      const cached = await fs.readFile(CACHE_FILE, 'utf-8')
+      const fallback = JSON.parse(cached)
+      console.warn('Returning cached fallback data.')
+      return NextResponse.json(fallback)
     } catch {
       return NextResponse.json(
         { error: 'Failed to fetch GitHub issues and no cache available.' },
         { status: 500 }
-      );
+      )
     }
   }
 }

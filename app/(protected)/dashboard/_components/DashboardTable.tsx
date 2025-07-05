@@ -266,7 +266,8 @@ export function DashboardTable({customData, disableFilters = false}: {customData
       setLoading(true);
       try {
         const response = await fetch(
-          `/api/issues?language=${languageFilter}&label=${difficultyFilter}`
+          // `/api/issues?language=${languageFilter}&label=${difficultyFilter}`
+          `/api/issues?language=JavaScript&label=${difficultyFilter}`
         );
         const result = await response.json();
         setData(result);

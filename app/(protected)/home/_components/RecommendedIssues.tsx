@@ -31,7 +31,7 @@ export function RecommendedIssues({ topLanguages }: RecommendedIssuesProps) {
         const response = await fetch('/api/advanced-search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt, userId }),
+          body: JSON.stringify({ prompt, userId, useCache: true }),
         });
 
         if (!response.ok) {

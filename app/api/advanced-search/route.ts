@@ -38,24 +38,26 @@ async function getGitHubSearchQuery(prompt: string): Promise<string> {
 
 export async function POST(req: NextRequest) {
   try {
-    const { prompt, userId } = await req.json();
+    const { prompt, userId, useCache } = await req.json();
     
 
     if (!prompt) {
       return NextResponse.json({ message: 'Prompt is required' }, { status: 400 });
     }
 
-    const cacheRef = doc(db, 'recommendedIssues', userId);
-    const cacheSnap = await getDoc(cacheRef);
+    if (useCache && userId) {
+      const cacheRef = doc(db, 'recommendedIssues', userId);
+      const cacheSnap = await getDoc(cacheRef);
 
-    if (cacheSnap.exists()) {
-      const cachedData = cacheSnap.data();
-      const lastUpdated = cachedData.lastUpdated.toDate();
-      const now = new Date();
+      if (cacheSnap.exists()) {
+        const cachedData = cacheSnap.data();
+        const lastUpdated = cachedData.lastUpdated.toDate();
+        const now = new Date();
 
-      if (now.getTime() - lastUpdated.getTime() < CACHE_DURATION_MS) {
-        console.log('Returning cached recommendations for user:', userId);
-        return NextResponse.json(cachedData.issues);
+        if (now.getTime() - lastUpdated.getTime() < CACHE_DURATION_MS) {
+          console.log('Returning cached recommendations for user:', userId);
+          return NextResponse.json(cachedData.issues);
+        }
       }
     }
 
@@ -108,11 +110,13 @@ export async function POST(req: NextRequest) {
       repoUrl: item.repository_url.replace('api.github.com/repos', 'github.com'),
     }));
 
-    // Cache the new recommendations in Firebase
-    await setDoc(cacheRef, {
-      issues,
-      lastUpdated: new Date(),
-    });
+    // Cache the new recommendations in Firebase only if useCache is true
+    if (useCache && userId) {
+      await setDoc(cacheRef, {
+        issues,
+        lastUpdated: new Date(),
+      });
+    }
 
     return NextResponse.json(issues);
 

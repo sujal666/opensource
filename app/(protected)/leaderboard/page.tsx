@@ -645,6 +645,7 @@ export default function LeaderboardPage() {
           setPodiumUsers(sortedUsers.slice(0, 3));
 
           if (isSignedIn && user) {
+            //@ts-ignore
             const index = sortedUsers.findIndex(u => u.githubUsername === user.username);
             if (index !== -1) {
               setCurrentUserRank(index + 1);

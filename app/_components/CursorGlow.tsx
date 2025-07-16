@@ -1,31 +1,3 @@
-// 'use client'
-
-// import React, { useEffect, useState } from 'react'
-
-// export const CursorGlow = () => {
-//   const [position, setPosition] = useState({ x: 0, y: 0 });
-
-//   useEffect(() => {
-//     const move = (e: MouseEvent) => {
-//       setPosition({ x: e.clientX, y: e.clientY });
-//     };
-//     window.addEventListener('mousemove', move);
-//     return () => window.removeEventListener('mousemove', move);
-//   }, []);
-
-//   return (
-//     <div
-//       className="pointer-events-none fixed top-0 left-0 z-[9999] transition-transform duration-75"
-//       style={{
-//         transform: `translate3d(${position.x - 75}px, ${position.y - 75}px, 0)`,
-//       }}
-//     >
-//       <div className="w-[150px] h-[150px] rounded-full bg-white/20 blur-2xl" />
-//     </div>
-//   );
-// };
-
-
 'use client'
 
 import React, { useEffect, useRef } from 'react'

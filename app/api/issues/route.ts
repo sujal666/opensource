@@ -149,9 +149,9 @@
 //     authorization: `token ${process.env.GITHUB_TOKEN}`,
 //   },
 // })
-// if (!process.env.GITHUB_TOKEN) {
-//   console.error("GITHUB_TOKEN is undefined on server");
-// }
+if (!process.env.GITHUB_TOKEN) {
+  console.error("GITHUB_TOKEN is undefined on server");
+}
 
 
 // export async function GET(request: Request) {

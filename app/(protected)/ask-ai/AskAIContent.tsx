@@ -162,18 +162,17 @@ export default function AskAIContent() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-black text-white ">
-      <div className="p-4 border-b border-gray-800">
-        <h1 className="text-2xl font-bold text-center">Solve your issues and doubts with AI Assistance</h1>
+    <div className="flex flex-col min-h-screen  text-white font-sans">
+      <header className="p-4 border-b border-gray-200">
+        <h1 className="text-xl font-bold text-center">AI Assistant</h1>
         {issue && (
-          <div className="mt-2">
-            <h2 className="text-lg font-semibold">{issue.title}</h2>
-            <p className="text-sm text-gray-400 truncate">{issue.body || 'No description'}</p>
+          <div className="mt-2 text-center">
+            <h2 className="text-md font-semibold text-gray-700">Issue: {issue.title}</h2>
           </div>
         )}
-      </div>
+      </header>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
+      <main className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide">
         {initialLoading ? (
           <div className="flex justify-center items-center h-full">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -181,20 +180,24 @@ export default function AskAIContent() {
         ) : (
           <>
             {messages.length === 0 && !loading ? (
-              <div className="flex justify-center items-center h-full text-gray-500 text-lg font-medium">
-                👋 Welcome! Please ask a question to begin.
+              <div className="flex justify-center items-center h-full">
+                <div className="text-center text-gray-600">
+                  <p className="text-lg font-medium">👋 Welcome!</p>
+                  <p>Ask me anything about the issue.</p>
+                </div>
               </div>
             ) : (
               messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
+                  className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  {message.sender === 'ai' && (
+                    <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-bold">AI</div>
+                  )}
                   <div
-                    className={`max-w-3/4 rounded-lg px-4 py-2 ${message.sender === 'user'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-800 text-gray-100'}`}
-                  >
+                    className={`max-w-3/4 rounded-xl px-4 py-3 ${message.sender === 'user'
+                      ? 'bg-blue-600 text-white rounded-br-none'
+                      : 'bg-gray-200 text-gray-800 rounded-bl-none'}`}>
                     {message.sender === 'ai' ? (
                       <div className="prose prose-invert max-w-none whitespace-pre-wrap">
                         <ReactMarkdown
@@ -207,14 +210,13 @@ export default function AskAIContent() {
                             a: ({ node, ...props }) => (
                               <a {...props} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer" />
                             ),
-                            //@ts-ignore
                             code: ({ node, inline, className, children, ...props }) =>
                               !inline ? (
-                                <pre className="bg-gray-900 p-3 rounded overflow-x-auto text-sm">
+                                <pre className="bg-gray-100 p-3 rounded-md overflow-x-auto text-sm font-mono">
                                   <code className="text-green-300">{children}</code>
                                 </pre>
                               ) : (
-                                <code className="bg-gray-800 p-1 rounded text-sm text-green-300">{children}</code>
+                                <code className="bg-gray-100 px-1 py-0.5 rounded-sm text-sm text-green-300 font-mono">{children}</code>
                               )
                           }}
                         >
@@ -224,37 +226,46 @@ export default function AskAIContent() {
                     ) : (
                       <p className="whitespace-pre-wrap">{cleanPromptMarkdown(message.text)}</p>
                     )}
-                    <p className="text-xs mt-1 opacity-70">
-                      {message.timestamp.toLocaleTimeString()}
+                    <p className="text-xs mt-2 opacity-60 text-right">
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
+                  {message.sender === 'user' && (
+                    <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-bold">You</div>
+                  )}
                 </div>
               ))
             )}
             <div ref={messagesEndRef} />
           </>
         )}
-      </div>
+      </main>
 
-      <form onSubmit={handleSubmit} className="p-4 border-t border-gray-800">
-        <div className="flex space-x-2">
+      <footer className="p-4 border-t border-gray-200">
+        <form onSubmit={handleSubmit} className="flex items-center space-x-3">
           <input
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Ask about this issue..."
-            className="flex-1 bg-gray-900 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Type your message..."
+            className="flex-1 bg-gray-800 text-gray-100 rounded-full px-5 h-12 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow duration-200"
             disabled={loading}
           />
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-5 h-12 rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-200 active:scale-95 flex items-center justify-center"
             disabled={loading || !inputMessage.trim()}
           >
-            {loading ? 'Sending...' : 'Send'}
+            {loading ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+              </svg>
+            )}
           </button>
-        </div>
-      </form>
+        </form>
+      </footer>
     </div>
   );
 }

@@ -1,8 +1,7 @@
 'use client';
 import React from 'react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from './app-sidebar';
 import { ClerkFirebaseSync } from '@/app/_components/ClerkFirebaseSync';
+import { TopNavbar } from '@/components/ui/top-navbar';
 
 const DashboardLayout = ({
   children,
@@ -10,20 +9,19 @@ const DashboardLayout = ({
   children: React.ReactNode;
 }) => {
   return (
-    <SidebarProvider>
+    <>
        <ClerkFirebaseSync />
-      <div className="flex h-screen w-full overflow-hidden">
-        {/* Sidebar */}
-        <AppSidebar />
+      <TopNavbar />
+      <div className="flex w-full overflow-hidden border border-purple-950 rounded-xl">
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-6 bg-background">
-          <div className="w-full h-full rounded-md border border-sidebar-border shadow-md p-4 overflow-y-auto max-h-[calc(100vh-4rem)] scrollbar-hide">
+          <div className="w-full  p-4 overflow-y-auto scrollbar-hide">
             {children}
           </div>
         </main>
       </div>
-    </SidebarProvider>
+    </>
   );
 };
 

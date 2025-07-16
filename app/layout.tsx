@@ -1,18 +1,14 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CursorGlow } from "./_components/CursorGlow";
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  useUser,
 } from '@clerk/nextjs'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { Analytics } from '@vercel/analytics/next';
+import { GitHubDataProvider } from "@/context/GitHubDataContext";
 
 
 const geistSans = Geist({
@@ -26,7 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Open Source",
+  title: "Issue Hunter",
   description: "A collection of open source projects",
 };
 
@@ -38,16 +34,20 @@ export default function RootLayout({
 
   return (
     <ClerkProvider>
-    <html lang="en" className="dark">
-         <GoogleTagManager gtmId="G-4Y39G3D75H" />
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
-      >
-        <CursorGlow />
-        {children}
-        <Analytics />
-      </body>
-    </html>
+      <GitHubDataProvider>
+        <html lang="en" className="" suppressHydrationWarning>
+             <GoogleTagManager gtmId="G-4Y39G3D75H" />
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+              <CursorGlow />
+              {children}
+              <Analytics />
+          </body>
+        </html>
+      </GitHubDataProvider>
     </ClerkProvider>
   );
 }
+
+

@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useUser } from '@clerk/nextjs'
@@ -29,9 +28,25 @@ export const ClerkFirebaseSync = () => {
           { merge: true } // merge so we don't overwrite existing data
         )
 
-        console.log('✅ Clerk user synced to Firestore')
+        // console.log('✅ Clerk user synced to Firestore')
+
+        // Now, trigger the GitHub data sync
+        // const response = await fetch('/api/sync-github-data', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: JSON.stringify({ userId: user.id }),
+        // });
+
+        // if (response.ok) {
+        //   console.log('✅ GitHub data sync initiated');
+        // } else {
+        //   console.error('❌ Failed to initiate GitHub data sync', await response.json());
+        // }
+
       } catch (err) {
-        console.error('❌ Failed to sync Clerk user to Firestore:', err)
+        console.error('❌ Failed to sync Clerk user to Firestore or initiate GitHub sync:', err)
       }
     }
 

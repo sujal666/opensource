@@ -210,6 +210,7 @@ export default function AskAIContent() {
                             a: ({ node, ...props }) => (
                               <a {...props} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer" />
                             ),
+                            //@ts-ignore
                             code: ({ node, inline, className, children, ...props }) =>
                               !inline ? (
                                 <pre className="bg-gray-100 p-3 rounded-md overflow-x-auto text-sm font-mono">

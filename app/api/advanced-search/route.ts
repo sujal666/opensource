@@ -112,6 +112,7 @@ export async function POST(req: NextRequest) {
 
     // Cache the new recommendations in Firebase only if useCache is true
     if (useCache && userId) {
+      //@ts-ignore
       await setDoc(cacheRef, {
         issues,
         lastUpdated: new Date(),

@@ -254,7 +254,8 @@ export default function LeaderboardTable({ filter }: Props) {
   }, [filter]);
 
   return (
-    <Table>
+    <div className="overflow-x-auto">
+      <Table>
       <TableHeader>
         <TableRow>
           <TableHead>Rank</TableHead>
@@ -307,5 +308,6 @@ export default function LeaderboardTable({ filter }: Props) {
         )}
       </TableBody>
     </Table>
+    </div>
   );
 }

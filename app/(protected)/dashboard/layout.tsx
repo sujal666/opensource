@@ -12,7 +12,7 @@ const DashboardLayout = ({
     <>
        <ClerkFirebaseSync />
       <TopNavbar />
-      <div className="flex w-full overflow-hidden border border-purple-950 rounded-xl">
+  <div className="flex w-full overflow-hidden border-l-[20px] border-r-[20px] border-b-[20px] border-purple-950 ">
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-6 bg-background">

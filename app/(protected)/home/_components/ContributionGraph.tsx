@@ -87,7 +87,7 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({
   ];
 
   return (
-    <div className="bg-gray-900 text-white p-6 rounded-lg">
+    <div className="bg-gray-900 text-white p-4 sm:p-6 rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">
           {totalCommits} submissions in the past one year
@@ -99,7 +99,7 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex overflow-x-auto pb-4">
         <div className="flex flex-col">
           <div className="flex">
             {/* {weeks.map((week, weekIdx) => {

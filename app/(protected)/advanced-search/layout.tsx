@@ -12,10 +12,10 @@ const AdvancedSearchLayout = ({
     <>
        <ClerkFirebaseSync />
       <TopNavbar />
-      <div className="flex w-full h-screen overflow-hidden border border-purple-950 rounded-xl">
+      <div className="flex w-full h-screen overflow-hidden border border-l-[20px] border-r-[20px] border-b-[20px] border-purple-950">
 
         {/* Main Content Area */}
-<main className="flex-1 overflow-y-auto bg-background p-6 scrollbar-hide">
+<main className="flex-1  overflow-y-auto bg-background p-6 scrollbar-hide">
   <div className="w-full  p-4 overflow-y-auto scrollbar-hide">
     {children}
   </div>

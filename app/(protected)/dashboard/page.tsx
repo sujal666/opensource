@@ -11,9 +11,9 @@ const DashboardPage =  () => {
 
 
   return (
-    <div className="space-y-6 px-4 md:px-6 py-4 ">
+    <div className="space-y-6 p-4 sm:p-6 lg:p-8">
      
-      <h1 className="relative z-10 mx-auto max-w-4xl text-center text-2xl font-bold text-slate-300 md:text-2xl lg:text-3xl">
+      <h1 className="relative z-10 mx-auto max-w-4xl text-center text-xl sm:text-2xl lg:text-3xl font-bold text-slate-300">
         {"Start your open source contribution, Today!"
           .split(" ")
           .map((word, index) => (
@@ -33,7 +33,7 @@ const DashboardPage =  () => {
           ))}
       </h1>
 
-      <p className='text-center  text-neutral-400'>
+      <p className='text-center text-sm sm:text-base text-neutral-400'>
         Choose issues according to your preferred programming language  <br />and difficulty level
       </p>
 

@@ -11,7 +11,7 @@ interface TablePaginationProps<TData> {
 export function TablePagination<TData>({ table }: TablePaginationProps<TData>) {
   return (
     <div className="flex items-center justify-between px-2 py-4">
-      <div className="flex items-center space-x-6 lg:space-x-8">
+      <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 lg:space-x-8">
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
           Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </div>

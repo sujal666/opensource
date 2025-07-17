@@ -119,8 +119,8 @@ export default function SavedPage() {
   }, [isSignedIn, user])
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Saved Issues</h1>
+    <div className="p-4 sm:p-6 lg:p-8">
+      <h1 className="text-xl sm:text-2xl font-semibold mb-4">Saved Issues</h1>
       <DashboardTable customData={savedIssues} disableFilters={true} />
     </div>
   )

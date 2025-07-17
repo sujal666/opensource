@@ -72,6 +72,16 @@
 // export default BasicLine
 
 
+
+
+
+
+
+
+
+
+
+
 'use client';
 
 import React from 'react';
@@ -82,10 +92,6 @@ interface LineChartProps {
   contributions: { date: string; count: number }[];
 }
 
-// ⛔️ Remove direct import
-// import Chart from 'react-apexcharts';
-
-// ✅ Dynamically import Chart with SSR disabled
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const processDataForChart = (contributions: { date: string; count: number }[]) => {
@@ -121,20 +127,35 @@ const BasicLine = ({ contributions }: LineChartProps) => {
   const chartData = processDataForChart(contributions);
 
   return (
-    <Chart
-      height={300}
-      options={{
-        chart: {
-          type: 'line',
-          zoom: { enabled: false },
-        },
-        dataLabels: { enabled: false },
-        stroke: { curve: 'smooth', width: 3 },
-        colors: [COLOR_2],
-        xaxis: { categories: chartData.categories },
-      }}
-      series={chartData.series}
-    />
+    <div className="w-full overflow-x-auto">
+      <div className="min-w-[320px]">
+        <Chart
+          options={{
+            chart: {
+              type: 'line',
+              zoom: { enabled: false },
+              toolbar: { show: false },
+            },
+            responsive: [
+              {
+                breakpoint: 768,
+                options: {
+                  chart: { width: '100%' },
+                },
+              },
+            ],
+            dataLabels: { enabled: false },
+            stroke: { curve: 'smooth', width: 3 },
+            colors: [COLOR_2],
+            xaxis: { categories: chartData.categories },
+          }}
+          series={chartData.series}
+          type="line"
+          height={300}
+          width="100%"
+        />
+      </div>
+    </div>
   );
 };
 

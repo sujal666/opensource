@@ -30,7 +30,7 @@ export function TableFilters({ languageFilter, setLanguageFilter, difficultyFilt
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-[200px] max-h-[250px] overflow-y-auto bg-gray-800 border-gray-700 shadow-md rounded-md scrollbar-hide">
+          <DropdownMenuContent className="w-full max-h-[250px] overflow-y-auto bg-gray-800 border-gray-700 shadow-md rounded-md scrollbar-hide">
             {LANGUAGE_LABELS.map((lang) => {
               const languageColors: Record<string, string> = {
                 JavaScript: "bg-yellow-900/50 text-yellow-300",

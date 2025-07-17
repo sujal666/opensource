@@ -52,8 +52,8 @@ export function RecommendedIssues({ topLanguages }: RecommendedIssuesProps) {
   }, [topLanguages, userId]);
 
   return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-bold text-gray-900 mb-4">Recommended Issues for You</h2>
+    <div className="mt-8 px-4 sm:px-6 lg:px-8">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Recommended Issues for You</h2>
       {loading ? (
         <div className="text-center text-gray-800">Loading recommendations...</div>
       ) : error ? (

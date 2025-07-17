@@ -61,24 +61,24 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             {/* ✅ Google Analytics */}
-            <Script
-              strategy="afterInteractive"
-              src="https://www.googletagmanager.com/gtag/js?id=G-6VRCN282F8"
-            />
-            <Script
-              id="google-analytics"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', 'G-6VRCN282F8', {
-                    page_path: window.location.pathname,
-                  });
-                `,
-              }}
-            />
+<Script
+  strategy="afterInteractive"
+  src="https://www.googletagmanager.com/gtag/js?id=G-4Y39G3D75H"
+/>
+<Script
+  id="google-analytics"
+  strategy="afterInteractive"
+  dangerouslySetInnerHTML={{
+    __html: `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4Y39G3D75H', {
+        page_path: window.location.pathname,
+      });
+    `,
+  }}
+/>
 
             <CursorGlow />
             {children}

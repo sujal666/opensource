@@ -159,13 +159,15 @@ export default function LandingPage() {
           <Link href="#community" className="text-gray-300 hover:text-white transition-colors">
             Community
           </Link>
+          <Link href="/home" className="text-gray-300 hover:text-white transition-colors">
           <Button
             variant="outline"
             className="border-gray-700 text-white hover:bg-white hover:text-black bg-transparent"
-          >
+            >
             <Github className="w-4 h-4 mr-2" />
             Sign in with GitHub
           </Button>
+            </Link>
         </div>
       </nav>
 
@@ -207,18 +209,46 @@ export default function LandingPage() {
               </Link>
           </div>
 
-          {/* Company logos section */}
-          <div className="mb-16">
-            <p className="text-gray-400 mb-8">Trusted by developers contributing to</p>
-            <div className="flex items-center justify-center space-x-12 opacity-60">
-              <div className="text-2xl font-bold">React</div>
-              <div className="text-2xl font-bold">Vue.js</div>
-              <div className="text-2xl font-bold">Angular</div>
-              <div className="text-2xl font-bold">Node.js</div>
-              <div className="text-2xl font-bold">Python</div>
-              <div className="text-2xl font-bold">Rust</div>
-            </div>
-          </div>
+         
+         {/* Company logos section */}
+         
+<div className="relative max-w-[600px] mx-auto overflow-hidden">
+  <p className="text-gray-400 mb-8 text-center">Trusted by developers contributing to</p>
+
+  <div className="relative w-full">
+    <div
+      className="flex animate-marquee items-center justify-center space-x-8" // increased space-x for equal spacing
+      style={{ animation: 'marquee 20s linear infinite' }}
+    >
+      {/* Logos - equal width and spacing */}
+      {[
+        "JavaScript",
+        "Ruby",
+        "TypeScript",
+        "Rust",
+        "Python",
+        "Kotlin",
+        "Java",
+        "JavaScript",
+        "Ruby",
+        "TypeScript",
+        "Rust",
+        "Python",
+        "Kotlin",
+        "Java",
+      ].map((lang) => (
+        <div
+          key={lang + Math.random()}
+          className="text-xl font-bold min-w-[120px] text-center px-3" // px-4 adds horizontal padding for spacing
+        >
+          {lang}
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+
         </div>
       </section>
 
@@ -245,7 +275,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Smart Filtering</h3>
                 <p className="text-gray-400">
-                  Filter issues by difficulty level, programming language, project size, and estimated time to complete.
+                  Filter issues by difficulty level and programming language also get help of AI to of you get struck.
                 </p>
               </CardContent>
             </Card>
@@ -255,9 +285,9 @@ export default function LandingPage() {
                 <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4">
                   <Users className="w-6 h-6 text-purple-400" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Mentorship Network</h3>
+                <h3 className="text-xl font-semibold mb-3 text-white">Advance Search</h3>
                 <p className="text-gray-400">
-                  Connect with experienced developers who can guide you through your first contributions.
+                  Give your Preferences in the prompt and let AI find the perfect issues for you.
                 </p>
               </CardContent>
             </Card>
@@ -269,7 +299,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Progress Tracking</h3>
                 <p className="text-gray-400">
-                  Track your contributions, build your portfolio, and watch your open source journey unfold.
+                  Track your contributions, commits, activity and watch your open source journey unfold.
                 </p>
               </CardContent>
             </Card>
@@ -385,20 +415,22 @@ export default function LandingPage() {
               Join thousands of developers who started their open source journey with us.
             </p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+              <Link href={'/home'}>
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8"
-              >
+                >
                 <Github className="w-5 h-5 mr-2" />
                 Get Started Free
               </Button>
-              <Button
+                </Link>
+              {/* <Button
                 size="lg"
                 variant="outline"
                 className="border-gray-700 text-white hover:bg-white hover:text-black bg-transparent"
               >
                 View Demo
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
@@ -429,10 +461,9 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Community</h4>
               <div className="space-y-2 text-gray-400">
-                <div>Discord</div>
-                <div>GitHub</div>
-                <div>Twitter</div>
-                <div>Blog</div>
+               <Link href="https://github.com/sujal666" ><div className="mb-1">GitHub</div></Link>
+               <Link href="https://x.com/Sujal50822932" ><div className="mb-1">Twitter</div></Link>
+               <Link href="https://www.linkedin.com/in/sujalpoojari/" ><div className="mb-1">LinkedIn</div></Link>
               </div>
             </div>
             <div>
@@ -446,7 +477,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 IssueHunter. All rights reserved.</p>
+            <p>&copy; 2025 IssueHunter. All rights reserved.</p>
           </div>
         </div>
       </footer>

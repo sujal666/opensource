@@ -36,17 +36,108 @@ async function getGitHubSearchQuery(prompt: string): Promise<string> {
   }
 }
 
+// export async function POST(req: NextRequest) {
+//   try {
+//     const { prompt, userId, useCache } = await req.json();
+    
+
+//     if (!prompt) {
+//       return NextResponse.json({ message: 'Prompt is required' }, { status: 400 });
+//     }
+
+//     if (useCache && userId) {
+//       const cacheRef = doc(db, 'recommendedIssues', userId);
+//       const cacheSnap = await getDoc(cacheRef);
+
+//       if (cacheSnap.exists()) {
+//         const cachedData = cacheSnap.data();
+//         const lastUpdated = cachedData.lastUpdated.toDate();
+//         const now = new Date();
+
+//         if (now.getTime() - lastUpdated.getTime() < CACHE_DURATION_MS) {
+//           console.log('Returning cached recommendations for user:', userId);
+//           return NextResponse.json(cachedData.issues);
+//         }
+//       }
+//     }
+
+//     const githubQuery = await getGitHubSearchQuery(prompt);
+    
+//     const response = await fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(githubQuery)}&per_page=20`, {
+//       headers: {
+//         Authorization: `token ${process.env.GITHUB_TOKEN}`,
+//       },
+//     });
+
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       console.error(`GitHub API error: ${response.status} - ${errorText}`);
+//       return NextResponse.json({ message: `GitHub API error: ${response.status} - ${errorText}` }, { status: response.status });
+//     }
+
+//     const data = await response.json();
+    
+
+//     const issuesWithLanguage = await Promise.all(data.items.map(async (item: any) => {
+//       try {
+//         const repoRes = await fetch(item.repository_url, {
+//           headers: {
+//             Authorization: `token ${process.env.GITHUB_TOKEN}`,
+//           },
+//         });
+//         if (repoRes.ok) {
+//           const repoData = await repoRes.json();
+//           item.language = repoData.language;
+//         } else {
+//           item.language = 'N/A';
+//         }
+//       } catch (error) {
+//         item.language = 'N/A';
+//       }
+//       return item;
+//     }));
+
+//     const issues: RepositoryIssue[] = issuesWithLanguage.map((item: any) => ({
+//       id: item.id.toString(),
+//       title: item.title,
+//       url: item.html_url,
+//       repoName: item.repository_url.split('/').slice(-2).join('/'),
+//       language: item.language || 'N/A',
+//       difficulty: item.labels.map((label: any) => label.name).join(', '),
+//       createdAt: item.created_at,
+//       updatedAt: item.updated_at,
+//       comments: item.comments,
+//       repoUrl: item.repository_url.replace('api.github.com/repos', 'github.com'),
+//     }));
+
+//     // Cache the new recommendations in Firebase only if useCache is true
+//     if (useCache && userId) {
+//       //@ts-ignore
+//       await setDoc(cacheRef, {
+//         issues,
+//         lastUpdated: new Date(),
+//       });
+//     }
+
+//     return NextResponse.json(issues);
+//   } catch (error) {
+//     console.error("Error in advanced-search API:", error);
+//     return new Response("Internal Server Error", { status: 500 });
+//   }
+// }
+
 export async function POST(req: NextRequest) {
   try {
     const { prompt, userId, useCache } = await req.json();
-    
 
     if (!prompt) {
       return NextResponse.json({ message: 'Prompt is required' }, { status: 400 });
     }
 
+    let cacheRef;
+
     if (useCache && userId) {
-      const cacheRef = doc(db, 'recommendedIssues', userId);
+      cacheRef = doc(db, 'recommendedIssues', userId);
       const cacheSnap = await getDoc(cacheRef);
 
       if (cacheSnap.exists()) {
@@ -62,7 +153,7 @@ export async function POST(req: NextRequest) {
     }
 
     const githubQuery = await getGitHubSearchQuery(prompt);
-    
+
     const response = await fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(githubQuery)}&per_page=20`, {
       headers: {
         Authorization: `token ${process.env.GITHUB_TOKEN}`,
@@ -70,13 +161,12 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("GitHub API error:", errorData);
-      return NextResponse.json({ message: 'Failed to fetch issues from GitHub' }, { status: response.status });
+      const errorText = await response.text();
+      console.error(`GitHub API error: ${response.status} - ${errorText}`);
+      return NextResponse.json({ message: `GitHub API error: ${response.status} - ${errorText}` }, { status: response.status });
     }
 
     const data = await response.json();
-    
 
     const issuesWithLanguage = await Promise.all(data.items.map(async (item: any) => {
       try {
@@ -111,8 +201,7 @@ export async function POST(req: NextRequest) {
     }));
 
     // Cache the new recommendations in Firebase only if useCache is true
-    if (useCache && userId) {
-      //@ts-ignore
+    if (useCache && userId && cacheRef) {
       await setDoc(cacheRef, {
         issues,
         lastUpdated: new Date(),
@@ -120,9 +209,9 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(issues);
-
   } catch (error) {
-    console.error("Error in advanced search API:", error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    console.error("Error in advanced-search API:", error);
+    return NextResponse.json({ message: 'Internal Server Error', error: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
+

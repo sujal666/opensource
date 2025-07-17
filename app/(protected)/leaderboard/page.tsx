@@ -633,49 +633,96 @@ export default function LeaderboardPage() {
   const [currentUserData, setCurrentUserData] = useState<LeaderboardUser | null>(null);
   const [totalUsers, setTotalUsers] = useState(0);
 
+  // useEffect(() => {
+  //   const fetchLeaderboard = async () => {
+  //     try {
+  //       const res = await fetch(`/api/leaderboard?filter=${filter}`);
+  //       const result = await res.json();
+  //           setUsers(result.data || []); // fix: use result.data
+    
+
+  //       if (Array.isArray(result.data)) {
+  //         const sortedUsers = result.data.sort((a:any, b:any) => b.totalContributions - a.totalContributions);
+  //         setUsers(sortedUsers);
+  //         setPodiumUsers(sortedUsers.slice(0, 3));
+
+  //         if (isSignedIn && user) {
+  //           //@ts-ignore
+  //           const index = sortedUsers.findIndex(u => u.githubUsername === user.username);
+  //           if (index !== -1) {
+  //             setCurrentUserRank(index + 1);
+  //             setCurrentUserData(sortedUsers[index]);
+  //           }
+  //         }
+  //       } else {
+  //         setUsers([]);
+  //         setPodiumUsers([]);
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to fetch leaderboard:', error);
+  //       setUsers([]);
+  //       setPodiumUsers([]);
+  //     }
+  //   };
+
+  //   const fetchTotalUsers = async () => {
+  //     try {
+  //       const res = await fetch('/api/users');
+  //       const data = await res.json();
+  //       setTotalUsers(data.totalUsers);
+  //     } catch (error) {
+  //       console.error('Failed to fetch total users:', error);
+  //     }
+  //   };
+
+  //   fetchLeaderboard();
+  //   fetchTotalUsers();
+  // }, [filter, isSignedIn, user]);
+
   useEffect(() => {
-    const fetchLeaderboard = async () => {
-      try {
-        const res = await fetch(`/api/leaderboard?filter=${filter}`);
-        const result = await res.json();
+  const updateAndFetchLeaderboard = async () => {
+    // ✅ First, update current user data in leaderboard
+    if (isSignedIn) {
+      await fetch('/api/updateLeaderboard');
+    }
 
-        if (Array.isArray(result.data)) {
-          const sortedUsers = result.data.sort((a:any, b:any) => b.totalContributions - a.totalContributions);
-          setUsers(sortedUsers);
-          setPodiumUsers(sortedUsers.slice(0, 3));
+    // ✅ Then fetch leaderboard data
+    try {
+      const res = await fetch(`/api/leaderboard?filter=${filter}`);
+      const result = await res.json();
+      setUsers(result.data || []);
 
-          if (isSignedIn && user) {
-            //@ts-ignore
-            const index = sortedUsers.findIndex(u => u.githubUsername === user.username);
-            if (index !== -1) {
-              setCurrentUserRank(index + 1);
-              setCurrentUserData(sortedUsers[index]);
-            }
+      if (Array.isArray(result.data)) {
+        //@ts-ignore
+        const sortedUsers = result.data.sort((a, b) => b.totalContributions - a.totalContributions);
+        setUsers(sortedUsers);
+        setPodiumUsers(sortedUsers.slice(0, 3));
+
+        if (user) {
+          //@ts-ignore
+          const index = sortedUsers.findIndex(u => u.userId === user.id);
+          if (index !== -1) {
+            setCurrentUserRank(index + 1);
+            setCurrentUserData(sortedUsers[index]);
+          } else {
+            setCurrentUserRank(null);
+            setCurrentUserData(null);
           }
-        } else {
-          setUsers([]);
-          setPodiumUsers([]);
         }
-      } catch (error) {
-        console.error('Failed to fetch leaderboard:', error);
+      } else {
         setUsers([]);
         setPodiumUsers([]);
       }
-    };
+    } catch (error) {
+      console.error('Failed to fetch leaderboard:', error);
+      setUsers([]);
+      setPodiumUsers([]);
+    }
+  };
 
-    const fetchTotalUsers = async () => {
-      try {
-        const res = await fetch('/api/users');
-        const data = await res.json();
-        setTotalUsers(data.totalUsers);
-      } catch (error) {
-        console.error('Failed to fetch total users:', error);
-      }
-    };
+  updateAndFetchLeaderboard();
 
-    fetchLeaderboard();
-    fetchTotalUsers();
-  }, [filter, isSignedIn, user]);
+}, [filter, isSignedIn, user]);
 
   return (
     <div className="space-y-8 p-4 md:p-8">

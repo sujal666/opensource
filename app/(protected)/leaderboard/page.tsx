@@ -724,6 +724,22 @@ export default function LeaderboardPage() {
 
 }, [filter, isSignedIn, user]);
 
+useEffect(() => {
+  const fetchTotalUsers = async () => {
+    try {
+      const res = await fetch('/api/users');
+      const data = await res.json();
+      console.log("Fetched total users:", data.totalUsers); // 🔴 Debug log
+      setTotalUsers(data.totalUsers);
+    } catch (error) {
+      console.error('Failed to fetch total users:', error);
+    }
+  };
+
+  fetchTotalUsers();
+}, []);
+
+
   return (
     <div className="space-y-8 p-4 md:p-8">
       <h1 className="text-3xl font-bold">Leaderboard</h1>
